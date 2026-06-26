@@ -4,6 +4,7 @@
 @section('content')
     <x-page-header title="Pembayaran" subtitle="Verifikasi pembayaran dan kelola transaksi.">
         <x-slot:actions>
+            <a href="{{ route('app.payments.cashier') }}" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Kasir</a>
             <a href="{{ route('app.payments.create') }}" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">+ Catat Pembayaran</a>
         </x-slot:actions>
     </x-page-header>
@@ -59,8 +60,13 @@
                                             <button class="rounded bg-rose-600 px-2 py-1 text-xs text-white hover:bg-rose-700">Tolak</button>
                                         </form>
                                     </div>
+                                @elseif($payment->status->value === 'verified')
+                                    <div class="flex flex-col items-end gap-1">
+                                        <a href="{{ route('app.payments.receipt', $payment) }}" class="rounded bg-brand-600 px-2 py-1 text-xs font-medium text-white hover:bg-brand-700">Cetak Kwitansi</a>
+                                        <span class="text-xs text-slate-400">{{ $payment->verified_at ? tanggal_id($payment->verified_at) : '-' }}</span>
+                                    </div>
                                 @else
-                                    <span class="text-xs text-slate-400">{{ $payment->verified_at ? tanggal_id($payment->verified_at) : '-' }}</span>
+                                    <span class="text-xs text-slate-400">-</span>
                                 @endif
                             </td>
                         </tr>

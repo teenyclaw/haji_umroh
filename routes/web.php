@@ -67,10 +67,14 @@ Route::middleware(['auth', 'tenant'])->prefix('app')->name('app.')->group(functi
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
 
     Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('payments/cashier', [PaymentController::class, 'cashier'])->name('payments.cashier');
+    Route::post('payments/cashier', [PaymentController::class, 'cashierStore'])->name('payments.cashier.store');
+    Route::get('payments/cashier/{payment}/success', [PaymentController::class, 'cashierSuccess'])->name('payments.cashier.success');
     Route::get('payments/create', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::post('payments/{payment}/verify', [PaymentController::class, 'verify'])->name('payments.verify');
     Route::post('payments/{payment}/reject', [PaymentController::class, 'reject'])->name('payments.reject');
+    Route::get('payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
 
     Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('jamaah/{jamaah}/documents/sync', [DocumentController::class, 'sync'])->name('documents.sync');

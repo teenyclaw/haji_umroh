@@ -5,7 +5,8 @@
     <x-page-header :title="'Invoice ' . $invoice->number" :subtitle="$invoice->booking?->package?->name">
         <x-slot:actions>
             <a href="{{ route('app.invoices.pdf', $invoice) }}" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">Unduh PDF</a>
-            <a href="{{ route('app.payments.create', ['invoice_id' => $invoice->id]) }}" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Catat Pembayaran</a>
+            <a href="{{ route('app.payments.cashier', ['invoice_id' => $invoice->id]) }}" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Bayar di Kasir</a>
+            <a href="{{ route('app.payments.create', ['invoice_id' => $invoice->id]) }}" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">Catat Pembayaran</a>
         </x-slot:actions>
     </x-page-header>
 

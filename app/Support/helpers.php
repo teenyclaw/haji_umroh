@@ -63,3 +63,43 @@ if (! function_exists('tanggal_id')) {
             : $carbon->translatedFormat('d F Y');
     }
 }
+
+if (! function_exists('terbilang')) {
+    function terbilang(int|float|null $value, bool $withSuffix = true): string
+    {
+        $angka = abs((int) round((float) ($value ?? 0)));
+
+        if ($angka === 0) {
+            return $withSuffix ? 'nol rupiah' : 'nol';
+        }
+
+        $satuan = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas'];
+        $kata = '';
+
+        if ($angka < 12) {
+            $kata = $satuan[$angka];
+        } elseif ($angka < 20) {
+            $kata = terbilang($angka - 10, false) . ' belas';
+        } elseif ($angka < 100) {
+            $kata = terbilang((int) floor($angka / 10), false) . ' puluh' . ($angka % 10 ? ' ' . terbilang($angka % 10, false) : '');
+        } elseif ($angka < 200) {
+            $kata = 'seratus' . ($angka > 100 ? ' ' . terbilang($angka - 100, false) : '');
+        } elseif ($angka < 1000) {
+            $kata = terbilang((int) floor($angka / 100), false) . ' ratus' . ($angka % 100 ? ' ' . terbilang($angka % 100, false) : '');
+        } elseif ($angka < 2000) {
+            $kata = 'seribu' . ($angka > 1000 ? ' ' . terbilang($angka - 1000, false) : '');
+        } elseif ($angka < 1000000) {
+            $kata = terbilang((int) floor($angka / 1000), false) . ' ribu' . ($angka % 1000 ? ' ' . terbilang($angka % 1000, false) : '');
+        } elseif ($angka < 1000000000) {
+            $kata = terbilang((int) floor($angka / 1000000), false) . ' juta' . ($angka % 1000000 ? ' ' . terbilang($angka % 1000000, false) : '');
+        } elseif ($angka < 1000000000000) {
+            $kata = terbilang((int) floor($angka / 1000000000), false) . ' miliar' . ($angka % 1000000000 ? ' ' . terbilang($angka % 1000000000, false) : '');
+        } else {
+            $kata = 'jumlah terlalu besar';
+        }
+
+        $kata = trim(preg_replace('/\s+/', ' ', $kata));
+
+        return $withSuffix ? $kata . ' rupiah' : $kata;
+    }
+}

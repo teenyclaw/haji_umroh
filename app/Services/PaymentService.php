@@ -31,6 +31,24 @@ class PaymentService
         });
     }
 
+    public function recordCashierPayment(array $data): Payment
+    {
+        return DB::transaction(function () use ($data) {
+            $payment = Payment::create([
+                ...$data,
+                'status' => PaymentStatus::Verified,
+                'verified_by' => Auth::id(),
+                'verified_at' => now(),
+            ]);
+
+            $this->recalculateInvoice($payment->invoice);
+
+            log_activity('payment.cashier', "Pembayaran kasir {$payment->number} tercatat & terverifikasi", $payment);
+
+            return $payment->fresh(['invoice.booking.package']);
+        });
+    }
+
     public function reject(Payment $payment, ?string $reason = null): void
     {
         DB::transaction(function () use ($payment, $reason) {
